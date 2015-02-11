@@ -63,7 +63,9 @@ typedef enum {
 class ESP
 {
 public:
+#ifdef ESP_DEBUG
   ESP(Stream *serial, Stream* debug, int chip_pd);
+#endif
   ESP(Stream *serial, int chip_pd);
   BOOL exec(const char* cmd, const char* waitFor, U32 timeout);
   BOOL initMqttClient(const char *clientId, const char *user, const char *pass, U32 keepalive);
@@ -84,8 +86,10 @@ public:
   FP<void, uint32_t*> mqttData;
 private:
   Stream *_serial;
+#ifdef ESP_DEBUG
   Stream *_debug;
   BOOL _debugEn;
+#endif
   mqtt_connect_info_t connect_info;
   mqtt_state_t  mqtt_state;
   tConnState connState;
@@ -96,7 +100,9 @@ private:
   U8 _buffSend[MQTT_BUF_SIZE];
   U8 _buffRecv[MQTT_BUF_SIZE];
   int _chip_pd;
+#ifdef ESP_DEBUG
   void INFO(String info);
+#endif
   void clearBuffer();
   String readData();
   void deliver_publish(uint8_t* message, int length);

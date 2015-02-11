@@ -9,15 +9,23 @@
 #include "FP.h"
 
 
+#ifdef ESP_DEBUG
 #define CHECK(f, msg)  if(f) { INFO(msg); return FALSE; }
+#else
+#define CHECK(f, msg)  if(f) { return FALSE;}
+#define INFO(msg)
+#endif
 
 
 ESP::ESP(Stream *serial, int chip_pd):
 _serial(serial), _chip_pd(_chip_pd)
 {
+#ifdef ESP_DEBUG
   _debugEn = FALSE;
+#endif
   pinMode(_chip_pd, OUTPUT);
 }
+#ifdef ESP_DEBUG
 ESP::ESP(Stream *serial, Stream* debug, int chip_pd):
 _serial(serial), _debug(debug), _chip_pd(_chip_pd)
 {
@@ -30,6 +38,7 @@ void ESP::INFO(String info)
   if(_debugEn)
     _debug->println(info);
 }
+#endif
 
 BOOL ESP::initMqttClient(const char *clientId, const char *user, const char *pass, U32 keepalive)
 {
