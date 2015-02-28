@@ -136,7 +136,7 @@ void ESP::process()
 
   switch(connState) {
   case TCP_RECONNECT:
-
+    mqttDisconnected(0);
     break;
   case MQTT_CONNECT_SEND:
     mqtt_msg_init(&mqtt_state.mqtt_connection, mqtt_state.out_buffer, mqtt_state.out_buffer_length);
